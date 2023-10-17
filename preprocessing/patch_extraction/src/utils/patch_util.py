@@ -33,7 +33,7 @@ from preprocessing.patch_extraction.src.utils.plotting import generate_polygon_o
 
 
 def get_files_from_dir(
-    file_path: Union[Path, str, List], file_type: str = "svs"
+    file_path: Union[Path, str, List], file_type: str = "ndpi"
 ) -> List[Path]:
     """Returns the names of all the files in the provided file path with matching extension
 
