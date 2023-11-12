@@ -306,6 +306,8 @@ class CellSegmentationInference:
                 wsi_inference_dataloader, total=len(wsi_inference_dataloader)
             ):
                 patches = batch[0].to(self.device)
+                # Swap the channels from RGB to BGR
+                patches = patches[:, [2, 1, 0], :, :]
 
                 metadata = batch[1]
                 if self.mixed_precision:
