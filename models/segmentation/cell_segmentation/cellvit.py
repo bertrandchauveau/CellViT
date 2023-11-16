@@ -369,7 +369,7 @@ class CellViT(nn.Module):
             # Get the probability values for the positive class (index 1)
             positive_class_probabilities = predictions_["nuclei_binary_map"][i, 1, :, :]            
             # Apply threshold to filter detections
-            filtered_detections = (positive_class_probabilities > confidence_threshold).float()            
+            filtered_detections = (positive_class_probabilities > confidence_threshold).int()            
 
             # Stack the results to create the final tensor
             pred_map = np.concatenate(
