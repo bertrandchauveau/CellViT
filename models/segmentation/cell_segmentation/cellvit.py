@@ -363,19 +363,22 @@ class CellViT(nn.Module):
         instance_preds = []
         type_preds = []
 
+        confidence_threshold = 0.5  # Adjust as needed. TO modify the threshold of confidence in nuclei detection
+        
         for i in range(predictions_["nuclei_binary_map"].shape[0]):
+            # Get the probability values for the positive class (index 1)
+            positive_class_probabilities = predictions_["nuclei_binary_map"][i, 1, :, :]            
+            # Apply threshold to filter detections
+            filtered_detections = (positive_class_probabilities > confidence_threshold).float()            
+
+            # Stack the results to create the final tensor
             pred_map = np.concatenate(
                 [
-                    torch.argmax(predictions_["nuclei_type_map"], dim=-1)[i]
-                    .detach()
-                    .cpu()[..., None],
-                    torch.argmax(predictions_["nuclei_binary_map"], dim=-1)[i]
-                    .detach()
-                    .cpu()[..., None],
+                    torch.argmax(predictions_["nuclei_type_map"], dim=-1)[i].detach().cpu()[..., None],
+                    filtered_detections.detach().cpu()[..., None],
                     predictions_["hv_map"][i].detach().cpu(),
-                ],
-                axis=-1,
-            )
+                ], axis=-1)
+                  
             instance_pred = cell_post_processor.post_process_cell_segmentation(pred_map)
             instance_preds.append(instance_pred[0])
             type_preds.append(instance_pred[1])
