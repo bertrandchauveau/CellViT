@@ -845,7 +845,9 @@ class PreProcessor(object):
             # OpenSlide: Address of the tile within the level as a (column, row) tuple
             new_tile = np.array(tiles.get_tile(level, (col, row)), dtype=np.uint8)
             patch = pad_tile(new_tile, tile_size + 2 * overlap, col, row)
-
+            #swap to bgr before color normalization, assuming channel last format
+            patch = patch[:, :, [2, 1, 0]]
+            
             # calculate background ratio for every patch
             background_ratio = calculate_background_ratio(
                 new_tile, self.config.patch_size
