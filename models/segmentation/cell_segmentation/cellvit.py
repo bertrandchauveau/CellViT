@@ -363,7 +363,7 @@ class CellViT(nn.Module):
         instance_preds = []
         type_preds = []
 
-        confidence_threshold = 0.25  # Adjust as needed. TO modify the threshold of confidence in nuclei detection
+        confidence_threshold = 0.125  # Adjust as needed. TO modify the threshold of confidence in nuclei detection
         
         for i in range(predictions_["nuclei_binary_map"].shape[0]):
             # Get the probability values for the positive class (index 1)
